@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-signin-client_id" content="1000110575700-246e9natn10r97rd972qa6itlr6arbb9.apps.googleusercontent.com">
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+  <button type="button" class="btn btn-success" onclick="getInfo()">click me!</button>
+  <button type="button" class="btn btn-success" onclick="signOut()">signout</button>
+
+  <script>
+    var auth2;
+    $(document).ready(function () {
+      gapi.load('auth2', function () {
+        auth2 = gapi.auth2.init({
+          client_id: '1000110575700-246e9natn10r97rd972qa6itlr6arbb9.apps.googleusercontent.com',
+          fetch_basic_profile: false,
+          scope: 'profile'
+        })
+        auth2.then(() => console.log(auth2.isSignedIn.get()))
+      })
+    })
+
+    function getInfo() {
+      if (auth2.isSignedIn.get()) {
+        var profile = auth2.currentUser.get().getBasicProfile();
+        console.log('ID: ' + profile.getId());
+        console.log('Full Name: ' + profile.getName());
+        console.log('Given Name: ' + profile.getGivenName());
+        console.log('Family Name: ' + profile.getFamilyName());
+        console.log('Image URL: ' + profile.getImageUrl());
+        console.log('Email: ' + profile.getEmail());
+      }
+    }
+
+    function signOut() {
+      var auth2 = gapi.auth2.getAuthInstance();
+      auth2.signOut().then(function () {
+        console.log('User signed out.');
+        window.location = "http://localhost:8081";
+      });
+    }
+  </script>
+</body>
+
+</html>
